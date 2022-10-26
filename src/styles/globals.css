@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "clock";
+  src: url("../../public/fonts/DSEG7Modern-Regular.ttf");
+}
