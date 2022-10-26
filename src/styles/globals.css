@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: "lcd";
-  src: url("../../public/fonts/LCD.ttf");
+  src: url("../fonts/LCD.ttf");
 }
 
 :root {
