@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "clock";
-  src: url("../../public/fonts/DSEG7Modern-Regular.ttf");
+  font-family: "lcd";
+  src: url("../../public/fonts/LCD.ttf");
+}
+
+:root {
+  color-scheme: dark;
 }
