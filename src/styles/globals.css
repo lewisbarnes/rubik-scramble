@@ -5,3 +5,8 @@
 :root {
   color-scheme: dark;
 }
+
+@font-face {
+  font-family: "lcd";
+  src: url("../fonts/lcd.ttf");
+}

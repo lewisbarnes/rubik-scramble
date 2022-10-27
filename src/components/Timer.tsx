@@ -106,7 +106,7 @@ export const TimerComponent = () => {
       </ConditionallyVisible>
 
       <p
-        className={`select-none p-0 font-[lcd] text-8xl md:text-9xl xl:text-[12rem] xl:leading-[12rem] ${
+        className={`select-none p-0 font-lcd text-8xl md:text-9xl xl:text-[12rem] xl:leading-[12rem] ${
           state === TimerState.INSPECTION || ready ? "text-green-500" : ""
         } ${state === TimerState.STOPPED && waiting ? "text-red-500" : ""}`}
       >
