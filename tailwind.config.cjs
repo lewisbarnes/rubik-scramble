@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        lcd: ["lcd"],
+        lcd: ["Segment7Standard"],
       },
     },
   },
