@@ -130,13 +130,11 @@ export const TimerComponent = () => {
               {bestTime ? getFormattedTime(bestTime.utc()) : "not set"}
             </span>
           </div>
-          <ConditionallyVisible visibleOn={state === TimerState.RUNNING}>
-            <div className="mt-3 w-60 space-y-4 text-center text-sm">
-              <p>{"{space} to start/stop timer"}</p>
-              <p>{"{n} for next scramble"}</p>
-              <p>hold space until timer goes green then release to start</p>
-            </div>
-          </ConditionallyVisible>
+          <div className="mt-3 w-60 space-y-4 text-center text-sm">
+            <p>{"{space} to start/stop timer"}</p>
+            <p>{"{n} for next scramble"}</p>
+            <p>hold space until timer goes green then release to start</p>
+          </div>
         </div>
       </ConditionallyVisible>
     </main>
