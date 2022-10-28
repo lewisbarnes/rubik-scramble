@@ -5,3 +5,7 @@
 :root {
   color-scheme: dark;
 }
+
+.Toastify__toast {
+  @apply min-h-fit rounded-md border border-green-500 bg-black p-2 text-center font-mono text-white;
+}

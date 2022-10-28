@@ -1,6 +1,11 @@
+import { toast } from "react-toastify";
+
 export const ScrambleDisplay = ({ scramble }: { scramble: string[] }) => {
   const copyScramble = () => {
     navigator.clipboard.writeText(scramble.join(" "));
+    toast("copied scramble to clipboard!", {
+      hideProgressBar: true,
+    });
   };
 
   return (

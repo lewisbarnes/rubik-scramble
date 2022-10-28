@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import { useScrambleGen } from "../utils/hooks/useScrambleGen";
 import { TimerState, usePuzzleTimer } from "../utils/timer";
 import { ConditionallyVisible } from "./ConditionallyVisible";
@@ -28,6 +29,9 @@ export const TimerComponent = () => {
       setLastTime(time);
       if (!bestTime || time < bestTime) {
         setBestTime(time.utc());
+        toast("new best time!", {
+          hideProgressBar: true,
+        });
       }
     }
     startStop();
