@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import { useUIStateStore } from "../pages/_app";
 import { useScrambleGen } from "../utils/hooks/useScrambleGen";
 import { TimerState, usePuzzleTimer } from "../utils/timer";
 import { ConditionallyVisible } from "./ConditionallyVisible";
@@ -8,7 +9,7 @@ import { ScrambleDisplay } from "./ScrambleDisplay";
 
 export const TimerComponent = () => {
   const [currentScramble, nextScramble] = useScrambleGen(10);
-  const [time, state, startStop, reset] = usePuzzleTimer();
+  const [time, state, startStop, reset] = usePuzzleTimer(true, 100);
 
   const [lastTime, setLastTime] = useState<dayjs.Dayjs | null>(null);
   const [bestTime, setBestTime] = useState<dayjs.Dayjs | null>(null);
@@ -17,8 +18,13 @@ export const TimerComponent = () => {
   const [ready, setReady] = useState(false);
   const [waiting, setWaiting] = useState(false);
 
+  const uiState = useUIStateStore();
+
   const shouldShowUI = useMemo(() => {
-    return state === TimerState.STOPPED && !(waiting || ready);
+    return (
+      state === TimerState.STOPPED ||
+      (state === TimerState.DNF && !(waiting || ready))
+    );
   }, [ready, waiting, state]);
 
   const [readyTimeout, setReadyTimeout] = useState<NodeJS.Timeout>();
@@ -27,12 +33,15 @@ export const TimerComponent = () => {
     if (state === TimerState.RUNNING) {
       nextScramble();
       setLastTime(time);
+      uiState.setHidden(false);
       if (!bestTime || time < bestTime) {
         setBestTime(time.utc());
         toast("new best time!", {
           hideProgressBar: true,
         });
       }
+    } else {
+      uiState.setHidden(true);
     }
     startStop();
   };
@@ -48,7 +57,10 @@ export const TimerComponent = () => {
         formatString = "ss.SSS";
       }
     }
-    return time.utc().format(formatString);
+    return time
+      .utc()
+      .format(formatString)
+      .substring(0, formatString.length - 2);
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -103,14 +115,14 @@ export const TimerComponent = () => {
 
   return (
     <main className="flex flex-grow flex-col items-center justify-center gap-2 font-mono text-white">
-      <ConditionallyVisible visibleOn={shouldShowUI}>
+      <ConditionallyVisible visibleOn={!uiState.uiHidden}>
         <div className="flex flex-col items-center gap-2">
           <ScrambleDisplay scramble={currentScramble} />
         </div>
       </ConditionallyVisible>
 
       <p
-        className={`select-none p-0 font-lcd text-8xl md:text-9xl xl:text-[12rem] xl:leading-[12rem] ${
+        className={`select-none p-0 text-8xl md:text-9xl xl:text-[12rem] xl:leading-[12rem] ${
           state === TimerState.INSPECTION || ready ? "text-green-500" : ""
         } ${state === TimerState.STOPPED && waiting ? "text-red-500" : ""}`}
       >
@@ -120,7 +132,7 @@ export const TimerComponent = () => {
           getFormattedTime(time.utc())
         )}
       </p>
-      <ConditionallyVisible visibleOn={shouldShowUI}>
+      <ConditionallyVisible visibleOn={!uiState.uiHidden}>
         <div className="flex flex-col items-center gap-1 text-xl">
           <div className="flex items-center gap-1 ">
             <span>last:</span>

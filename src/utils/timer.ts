@@ -15,13 +15,23 @@ const nextStates: Record<TimerState, TimerState> = {
   [TimerState.STOPPED]: TimerState.RUNNING,
 };
 
+const nextStatesWithInspection: Record<TimerState, TimerState> = {
+  [TimerState.INSPECTION]: TimerState.RUNNING,
+  [TimerState.RUNNING]: TimerState.STOPPED,
+  [TimerState.DNF]: TimerState.INSPECTION,
+  [TimerState.STOPPED]: TimerState.INSPECTION,
+};
+
 export const usePuzzleTimer = (
+  withInspection = false,
   updateInterval = 10
 ): [dayjs.Dayjs, TimerState, () => void, () => void] => {
   const [startTime, setStartTime] = useState(dayjs().utc());
   const [currentTime, setCurrentTime] = useState(
     dayjs(dayjs().utc().diff(dayjs().utc(), "millisecond"))
   );
+
+  const states = withInspection ? nextStatesWithInspection : nextStates;
 
   const [currentState, setCurrentState] = useState(TimerState.STOPPED);
 
@@ -64,15 +74,19 @@ export const usePuzzleTimer = (
     switch (currentState) {
       case TimerState.STOPPED:
       case TimerState.DNF:
-        setStartTime(dayjs().utc());
-        // setStartTime(dayjs().utc().add(inspectionTime, "millisecond"));
+        if (withInspection) {
+          setStartTime(dayjs().utc().add(15000, "millisecond"));
+        } else {
+          setStartTime(dayjs().utc());
+        }
+
         break;
       case TimerState.INSPECTION:
         setStartTime(dayjs().utc());
       default:
         break;
     }
-    setCurrentState((prev) => nextStates[prev]);
+    setCurrentState((prev) => states[prev]);
   };
 
   const reset = () => {
