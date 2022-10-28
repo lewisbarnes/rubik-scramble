@@ -38,6 +38,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     // <SessionProvider session={session}>
     <div className="flex h-screen w-screen flex-col items-center justify-center bg-black font-mono text-white">
+      <ConditionallyVisible visibleOn={!uiState.uiHidden}>
+        <p className="p-4 text-2xl">rubik-scramble</p>
+      </ConditionallyVisible>
       <Component {...pageProps} />
       <ConditionallyVisible visibleOn={!uiState.uiHidden}>
         <p className="p-4 text-center font-mono">
@@ -51,6 +54,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         transition={fade}
         autoClose={1000}
         draggable={false}
+        limit={3}
       />
     </div>
     // </SessionProvider>

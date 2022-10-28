@@ -8,15 +8,15 @@ import { ConditionallyVisible } from "./ConditionallyVisible";
 import { ScrambleDisplay } from "./ScrambleDisplay";
 
 export const TimerComponent = () => {
+  const [ready, setReady] = useState(false);
+  const [waiting, setWaiting] = useState(false);
+  const [useInspection, setUseInspection] = useState(false);
   const [currentScramble, nextScramble] = useScrambleGen(10);
-  const [time, state, startStop, reset] = usePuzzleTimer(true, 100);
+  const [time, state, startStop, reset] = usePuzzleTimer(useInspection, 100);
 
   const [lastTime, setLastTime] = useState<dayjs.Dayjs | null>(null);
   const [bestTime, setBestTime] = useState<dayjs.Dayjs | null>(null);
   const [keyDown, setKeyDown] = useState(false);
-
-  const [ready, setReady] = useState(false);
-  const [waiting, setWaiting] = useState(false);
 
   const uiState = useUIStateStore();
 
@@ -72,6 +72,7 @@ export const TimerComponent = () => {
         if (state === TimerState.STOPPED) {
           reset();
           setWaiting(true);
+          uiState.setHidden(true);
           setReadyTimeout(
             setTimeout(() => {
               setReady(true);
@@ -81,12 +82,13 @@ export const TimerComponent = () => {
         } else {
           startStopTimer();
         }
-      default:
       case "n":
         if (state !== TimerState.STOPPED) {
           return;
         }
         nextScramble();
+        break;
+      default:
         break;
     }
     setKeyDown(true);
@@ -100,6 +102,7 @@ export const TimerComponent = () => {
       setReady(false);
       setWaiting(false);
       clearTimeout(readyTimeout);
+      uiState.setHidden(false);
     }
     setKeyDown(false);
   };
@@ -145,6 +148,21 @@ export const TimerComponent = () => {
             <span>
               {bestTime ? getFormattedTime(bestTime.utc()) : "not set"}
             </span>
+          </div>
+          <div className="text-md mt-3 flex select-none justify-center gap-2">
+            <p>Inspection Period?</p>
+            <div
+              className={`relative h-8 w-16 rounded-full border border-white ${
+                useInspection ? "bg-green-500" : "bg-red-500"
+              }`}
+              onClick={() => setUseInspection((prev) => !prev)}
+            >
+              <div
+                className={`${
+                  !useInspection ? "left-1" : "right-1"
+                } absolute  top-1 bottom-1 w-6 rounded-full bg-black`}
+              ></div>
+            </div>
           </div>
           <div className="mt-3 w-60 space-y-4 text-center text-sm">
             <p>{"{space} to start/stop timer"}</p>
