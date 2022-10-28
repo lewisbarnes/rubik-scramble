@@ -29,7 +29,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   const fade = cssTransition({
-    enter: "animate__animated animate__fadeIn",
+    enter: "animate__animated animate__fadeIn animate__delay-2s",
     exit: "animate__animated animate__fadeOut",
   });
 
