@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const solveSessionRouter = router({
   getCurrentSession: protectedProcedure.query(async ({ ctx }) => {
-    let result = await ctx.prisma.solveSession.findFirst({
+    const result = await ctx.prisma.solveSession.findFirst({
       where: { userId: ctx.session?.user?.id },
       include: { puzzleSolves: true },
     });
