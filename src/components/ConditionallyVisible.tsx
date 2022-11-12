@@ -4,7 +4,7 @@ export const ConditionallyVisible: React.FC<{
   visibleOn: boolean;
   children?: React.ReactNode;
   className?: string;
-}> = ({ visibleOn, children }) => {
+}> = ({ visibleOn, children, className }) => {
   const [animation, setAnimation] = useState("");
 
   useEffect(() => {
@@ -14,13 +14,7 @@ export const ConditionallyVisible: React.FC<{
   }, [visibleOn]);
 
   return (
-    <div
-      className={`${
-        visibleOn
-          ? animation
-          : "animate__animated animate__fadeOut animate__fast"
-      } `}
-    >
+    <div className={`${!visibleOn ? "invisible" : ""} ${className} contents`}>
       {children}
     </div>
   );

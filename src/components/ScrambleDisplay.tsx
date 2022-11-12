@@ -9,14 +9,16 @@ export const ScrambleDisplay = ({ scramble }: { scramble: string[] }) => {
   };
 
   return (
-    <div className="text-md grid select-none grid-cols-[repeat(14,_1fr)] items-center justify-center">
+    <div className="text-md flex flex-auto flex-row flex-wrap justify-center gap-4 text-center uppercase">
       {scramble?.map((s, i) => (
-        <span key={`scramble${i}`}>{s}</span>
+        <div key={`scramble${i}`} className="block">
+          {s}
+        </div>
       ))}
       <button
         title="Copy Scramble"
         onClick={copyScramble}
-        className="rounded-md p-1 text-zinc-700 hover:text-white"
+        className="block rounded-md p-1 text-zinc-700 hover:text-white"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
